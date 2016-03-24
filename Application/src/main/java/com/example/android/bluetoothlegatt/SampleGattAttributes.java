@@ -28,11 +28,9 @@ public class SampleGattAttributes {
 
     static {
         // Sample Services.
-        attributes.put("0000180d-0000-1000-8000-00805f9b34fb", "Heart Rate Service");
-        attributes.put("0000180a-0000-1000-8000-00805f9b34fb", "Device Information Service");
+        attributes.put("42821a40-e477-11e2-82d0-0002a5d5c51b", "Environment Sensor Service");
         // Sample Characteristics.
-        attributes.put(HEART_RATE_MEASUREMENT, "Heart Rate Measurement");
-        attributes.put("00002a29-0000-1000-8000-00805f9b34fb", "Manufacturer Name String");
+        attributes.put("a32e5520-e477-11e2-a9e3-0002a5d5c51b", "Temperature Sensor");
     }
 
     public static String lookup(String uuid, String defaultName) {
