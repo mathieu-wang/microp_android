@@ -263,6 +263,21 @@ public class BluetoothLeService extends Service {
     }
 
     /**
+     * Request a write on a given {@code BluetoothGattCharacteristic}.
+     * callback.
+     *
+     * @param characteristic The characteristic to write to.
+     */
+    //TODO: Need to test
+    public void writeCharacteristic(BluetoothGattCharacteristic characteristic) {
+        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
+            Log.w(TAG, "BluetoothAdapter not initialized");
+            return;
+        }
+        mBluetoothGatt.writeCharacteristic(characteristic);
+    }
+
+    /**
      * Enables or disables notification on a give characteristic.
      *
      * @param characteristic Characteristic to act on.
