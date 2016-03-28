@@ -121,10 +121,9 @@ public class BluetoothLeService extends Service {
                                  final BluetoothGattCharacteristic characteristic) {
         final Intent intent = new Intent(action);
 
-        // Write data as sint16.
-        // TODO: Handle floats and other types of int
-        int value = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 0);
-        intent.putExtra(EXTRA_DATA, String.valueOf(value));
+        // Write data as float in uint32 representation.
+        int value = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT32, 0);
+        intent.putExtra(EXTRA_DATA, String.valueOf(Float.intBitsToFloat(value)));
         sendBroadcast(intent);
     }
 

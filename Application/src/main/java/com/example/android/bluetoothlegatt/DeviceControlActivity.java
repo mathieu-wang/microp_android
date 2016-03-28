@@ -189,12 +189,13 @@ public class DeviceControlActivity extends Activity {
 
         final int delay = 1000;
         final Handler handler =new Handler();
+        //TODO: handle disconnection to avoid NPE
         final Runnable r = new Runnable() {
             public void run() {
                 handler.postDelayed(this, delay);
                 if (mGattCharacteristics != null && !mGattCharacteristics.isEmpty()) {
                     final BluetoothGattCharacteristic characteristic =
-                            mGattCharacteristics.get(2).get(1); // TODO: un-hardcode. check Pitch every second for now
+                            mGattCharacteristics.get(2).get(1); // TODO: un-hardcode. check and display Pitch every second for now
                     final int charaProp = characteristic.getProperties();
                     if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
                         // If there is an active notification on a characteristic, clear
