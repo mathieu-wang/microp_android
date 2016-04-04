@@ -145,8 +145,9 @@ public class DeviceControlActivity extends Activity {
                                         mNotifyCharacteristic, false);
                                 mNotifyCharacteristic = null;
                             }
-                            String str = "hello";
-                            byte[] bytes = str.getBytes();
+                            byte speed = 12;
+                            byte[] bytes = new byte[1];
+                            bytes[0] = speed;
                             characteristic.setValue(bytes);
                             mBluetoothLeService.writeCharacteristic(characteristic);
                         }
@@ -190,32 +191,32 @@ public class DeviceControlActivity extends Activity {
         final int delay = 1000;
         final Handler handler =new Handler();
         //TODO: handle disconnection to avoid NPE
-        final Runnable r = new Runnable() {
-            public void run() {
-                handler.postDelayed(this, delay);
-                if (mGattCharacteristics != null && !mGattCharacteristics.isEmpty()) {
-                    final BluetoothGattCharacteristic characteristic =
-                            mGattCharacteristics.get(2).get(1); // TODO: un-hardcode. check and display Pitch every second for now
-                    final int charaProp = characteristic.getProperties();
-                    if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
-                        // If there is an active notification on a characteristic, clear
-                        // it first so it doesn't update the data field on the user interface.
-                        if (mNotifyCharacteristic != null) {
-                            mBluetoothLeService.setCharacteristicNotification(
-                                    mNotifyCharacteristic, false);
-                            mNotifyCharacteristic = null;
-                        }
-                        mBluetoothLeService.readCharacteristic(characteristic);
-                    }
-                    if ((charaProp | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
-                        mNotifyCharacteristic = characteristic;
-                        mBluetoothLeService.setCharacteristicNotification(
-                                characteristic, true);
-                    }
-                }
-            }
-        };
-        handler.postDelayed(r, delay);
+//        final Runnable r = new Runnable() {
+//            public void run() {
+//                handler.postDelayed(this, delay);
+//                if (mGattCharacteristics != null && !mGattCharacteristics.isEmpty()) {
+//                    final BluetoothGattCharacteristic characteristic =
+//                            mGattCharacteristics.get(2).get(1); // TODO: un-hardcode. check and display Pitch every second for now
+//                    final int charaProp = characteristic.getProperties();
+//                    if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
+//                        // If there is an active notification on a characteristic, clear
+//                        // it first so it doesn't update the data field on the user interface.
+//                        if (mNotifyCharacteristic != null) {
+//                            mBluetoothLeService.setCharacteristicNotification(
+//                                    mNotifyCharacteristic, false);
+//                            mNotifyCharacteristic = null;
+//                        }
+//                        mBluetoothLeService.readCharacteristic(characteristic);
+//                    }
+//                    if ((charaProp | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
+//                        mNotifyCharacteristic = characteristic;
+//                        mBluetoothLeService.setCharacteristicNotification(
+//                                characteristic, true);
+//                    }
+//                }
+//            }
+//        };
+//        handler.postDelayed(r, delay);
     }
 
     @Override
