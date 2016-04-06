@@ -145,9 +145,14 @@ public class DeviceControlActivity extends Activity {
                                         mNotifyCharacteristic, false);
                                 mNotifyCharacteristic = null;
                             }
-                            byte speed = 12;
+                            byte byteToWrite = 0;
+                            if (characteristic.getUuid().toString().equals(SampleGattAttributes.LED_SPEED_CHAR_UUID)) {
+                                byteToWrite = 12; //TODO: get actual speed value
+                            } else if (characteristic.getUuid().toString().equals(SampleGattAttributes.LED_INTENSITY_CHAR_UUID)) {
+                                byteToWrite = 8; //TODO: get actual intensity value
+                            }
                             byte[] bytes = new byte[1];
-                            bytes[0] = speed;
+                            bytes[0] = byteToWrite;
                             characteristic.setValue(bytes);
                             mBluetoothLeService.writeCharacteristic(characteristic);
                         }
