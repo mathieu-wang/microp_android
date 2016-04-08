@@ -26,18 +26,27 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.provider.ContactsContract;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.SeekBar;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
+
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 /**
  * For a given BLE device, this Activity provides the user interface to connect, display data,
@@ -176,8 +185,9 @@ public class DeviceControlActivity extends Activity {
 
         // Sets up UI references.
         ((TextView) findViewById(R.id.device_address)).setText(mDeviceAddress);
-        mGattServicesList = (ExpandableListView) findViewById(R.id.gatt_services_list);
-        mGattServicesList.setOnChildClickListener(servicesListClickListner);
+        //TODO: figure out how to reconcile the two
+        //mGattServicesList = (ExpandableListView) findViewById(R.id.gatt_services_list);
+        //mGattServicesList.setOnChildClickListener(servicesListClickListner);
         mConnectionState = (TextView) findViewById(R.id.connection_state);
         mDataField = (TextView) findViewById(R.id.data_value);
 
@@ -185,16 +195,116 @@ public class DeviceControlActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+
+
+        // the LED controls
+        SeekBar speedSelector = (SeekBar) findViewById(R.id.speedSlider);
+        speedSelector.setOnSeekBarChangeListener(speedSelectorListener);
+
+        SeekBar intensitySelector = (SeekBar) findViewById(R.id.intensitySlider);
+        intensitySelector.setOnSeekBarChangeListener(intensitySelectorListener);
+
+
+        // the board values graphs
+        GraphView tempGraph = (GraphView)findViewById(R.id.tempGraph);
+        tempData = new LineGraphSeries<DataPoint>();
+        tempGraph.addSeries(tempData);
+        tempGraph.getViewport().setXAxisBoundsManual(true);
+        tempGraph.getViewport().setMinX(0);
+        tempGraph.getViewport().setMaxX(60);
+
+    }
+
+    private SeekBar.OnSeekBarChangeListener speedSelectorListener =
+            new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    updateSpeedTextSize(progress);
+                    //TODO: add in function that actually sends the speed to the board
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+            };
+
+    private int[] speeds = {R.id.answerNegative10,R.id.answerNegative9,R.id.answerNegative8,R.id.answerNegative7,
+            R.id.answerNegative6,R.id.answerNegative5,R.id.answerNegative4,R.id.answerNegative3,R.id.answerNegative2,
+            R.id.answerNegative1,R.id.answer0,R.id.answer1,R.id.answer2,R.id.answer3,R.id.answer4,R.id.answer5,
+            R.id.answer6,R.id.answer7,R.id.answer8,R.id.answer9,R.id.answer10,};
+
+    private void updateSpeedTextSize(int currentSpeed) {
+        TextView selectedSpeed = (TextView) findViewById(speeds[currentSpeed]);
+        selectedSpeed.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+    }
+
+    private SeekBar.OnSeekBarChangeListener intensitySelectorListener =
+            new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    updateIntensityTextSize(progress);
+                    //TODO: add in function that actually sends the speed to the board
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+            };
+
+    private int[] intensities = {R.id.answerNegative10i,R.id.answerNegative9i,R.id.answerNegative8i,R.id.answerNegative7i,
+            R.id.answerNegative6i,R.id.answerNegative5i,R.id.answerNegative4i,R.id.answerNegative3i,R.id.answerNegative2i,
+            R.id.answerNegative1i,R.id.answer0i,R.id.answer1i,R.id.answer2i,R.id.answer3i,R.id.answer4i,R.id.answer5i,
+            R.id.answer6i,R.id.answer7i,R.id.answer8i,R.id.answer9i,R.id.answer10i,};
+
+    private void updateIntensityTextSize(int currentIntensity) {
+        TextView selectedIntensity = (TextView) findViewById(speeds[currentIntensity]);
+        selectedIntensity.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+    }
+
+    //TODO: move this to the top
+    private final Handler mHandler = new Handler();
+    private Runnable mTimer1;
+    private LineGraphSeries<DataPoint> tempData;
+    private double graph2LastXValue = 5d;
+
+    double mLastRandom = 2;
+    Random mRand = new Random();
+    private double getRandom() {
+        return mLastRandom += mRand.nextDouble() * 0.5 - 0.25;
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume() {4
         super.onResume();
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
         if (mBluetoothLeService != null) {
             final boolean result = mBluetoothLeService.connect(mDeviceAddress);
             Log.d(TAG, "Connect request result=" + result);
         }
+
+        // the graph updating part
+        mTimer1 = new Runnable() {
+            @Override
+            public void run() {
+                graph2LastXValue += 1d;
+                //TODO: append actual data...
+                tempData.appendData(new DataPoint(graph2LastXValue, getRandom()), true, 60);
+                mHandler.postDelayed(this, 200);
+            }
+        };
+        mHandler.postDelayed(mTimer1, 1000);
     }
 
     @Override
