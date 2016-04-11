@@ -28,7 +28,6 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -201,18 +200,31 @@ public class DeviceControlActivity extends Activity {
         SeekBar speedSelector = (SeekBar) findViewById(R.id.speedSlider);
         speedSelector.setOnSeekBarChangeListener(speedSelectorListener);
 
-        /*SeekBar intensitySelector = (SeekBar) findViewById(R.id.intensitySlider);
-        intensitySelector.setOnSeekBarChangeListener(intensitySelectorListener);*/
+        SeekBar intensitySelector = (SeekBar) findViewById(R.id.intensitySlider);
+        intensitySelector.setOnSeekBarChangeListener(intensitySelectorListener);
 
 
-        /*1
         // the board values graphs
         GraphView tempGraph = (GraphView)findViewById(R.id.tempGraph);
         tempData = new LineGraphSeries<DataPoint>();
         tempGraph.addSeries(tempData);
         tempGraph.getViewport().setXAxisBoundsManual(true);
         tempGraph.getViewport().setMinX(0);
-        tempGraph.getViewport().setMaxX(60);*/
+        tempGraph.getViewport().setMaxX(60);
+
+        GraphView pitchGraph = (GraphView)findViewById(R.id.pitchGraph);
+        pitchData = new LineGraphSeries<DataPoint>();
+        pitchGraph.addSeries(pitchData);
+        pitchGraph.getViewport().setXAxisBoundsManual(true);
+        pitchGraph.getViewport().setMinX(0);
+        pitchGraph.getViewport().setMaxX(60);
+
+        GraphView rollGraph = (GraphView)findViewById(R.id.rollGraph);
+        rollData = new LineGraphSeries<DataPoint>();
+        rollGraph.addSeries(rollData);
+        rollGraph.getViewport().setXAxisBoundsManual(true);
+        rollGraph.getViewport().setMinX(0);
+        rollGraph.getViewport().setMaxX(60);
 
     }
 
@@ -274,7 +286,10 @@ public class DeviceControlActivity extends Activity {
     private final Handler mHandler = new Handler();
     private Runnable mTimer1;
     private LineGraphSeries<DataPoint> tempData;
-    private double graph2LastXValue = 5d;
+    private LineGraphSeries<DataPoint> pitchData;
+    private LineGraphSeries<DataPoint> rollData;
+    private double graphLastXValue = 5d;
+
 
     double mLastRandom = 2;
     Random mRand = new Random();
@@ -292,16 +307,18 @@ public class DeviceControlActivity extends Activity {
         }
 
         // the graph updating part
-        /*mTimer1 = new Runnable() {
+        mTimer1 = new Runnable() {
             @Override
             public void run() {
-                graph2LastXValue += 1d;
+                graphLastXValue += 1d;
                 //TODO: append actual data...
-                tempData.appendData(new DataPoint(graph2LastXValue, getRandom()), true, 60);
+                tempData.appendData(new DataPoint(graphLastXValue, getRandom()), true, 60);
+                pitchData.appendData(new DataPoint(graphLastXValue, getRandom()), true, 60);
+                rollData.appendData(new DataPoint(graphLastXValue, getRandom()), true, 60);
                 mHandler.postDelayed(this, 200);
             }
         };
-        mHandler.postDelayed(mTimer1, 1000);*/
+        mHandler.postDelayed(mTimer1, 1000);
     }
 
     @Override
