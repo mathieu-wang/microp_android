@@ -13,7 +13,17 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:stretchColumns="1">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
         android:layout_width="match_parent"
@@ -74,6 +84,11 @@
 
     </LinearLayout>
 
+
+    <ExpandableListView android:id="@+id/gatt_services_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <TextView
         style="@style/CardView.Light"
         android:layout_width="wrap_content"
@@ -104,7 +119,7 @@
             android:weightSum="1">
             <TextView android:text="-10"
                 android:id="@+id/answerNegative10"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -114,7 +129,7 @@
 
             <TextView android:text="-9"
                 android:id="@+id/answerNegative9"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -124,7 +139,7 @@
 
             <TextView android:text="-8"
                 android:id="@+id/answerNegative8"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -134,7 +149,7 @@
 
             <TextView android:text="-7"
                 android:id="@+id/answerNegative7"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -144,7 +159,7 @@
 
             <TextView android:text="-6"
                 android:id="@+id/answerNegative6"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -154,7 +169,7 @@
 
             <TextView android:text="-5"
                 android:id="@+id/answerNegative5"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -164,7 +179,7 @@
 
             <TextView android:text="-4"
                 android:id="@+id/answerNegative4"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -174,7 +189,7 @@
 
             <TextView android:text="-3"
                 android:id="@+id/answerNegative3"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -184,7 +199,7 @@
 
             <TextView android:text="-2"
                 android:id="@+id/answerNegative2"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -194,7 +209,7 @@
 
             <TextView android:text="-1"
                 android:id="@+id/answerNegative1"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -204,7 +219,7 @@
 
             <TextView android:text="0"
                 android:id="@+id/answer0"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -214,7 +229,7 @@
 
             <TextView android:text="1"
                 android:id="@+id/answer1"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -224,7 +239,7 @@
 
             <TextView android:text="2"
                 android:id="@+id/answer2"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -234,7 +249,7 @@
 
             <TextView android:text="3"
                 android:id="@+id/answer3"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -244,7 +259,7 @@
 
             <TextView android:text="4"
                 android:id="@+id/answer4"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -254,7 +269,7 @@
 
             <TextView android:text="5"
                 android:id="@+id/answer5"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -264,7 +279,7 @@
 
             <TextView android:text="6"
                 android:id="@+id/answer6"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -274,7 +289,7 @@
 
             <TextView android:text="7"
                 android:id="@+id/answer7"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -284,7 +299,7 @@
 
             <TextView android:text="8"
                 android:id="@+id/answer8"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -294,7 +309,7 @@
 
             <TextView android:text="9"
                 android:id="@+id/answer9"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -304,7 +319,7 @@
 
             <TextView android:text="10"
                 android:id="@+id/answer10"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -313,7 +328,8 @@
             android:layout_weight="0"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:max="21" />
+            android:max="20"
+            android:longClickable="false" />
 
         <TextView
             style="@style/CardView.Light"
@@ -330,209 +346,19 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:weightSum="1">
-        <TextView android:text="-10"
-            android:id="@+id/answerNegative10i"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Space
-            android:layout_width="6sp"
-            android:layout_height="match_parent" />
-
-        <TextView android:text="-9"
-            android:id="@+id/answerNegative9i"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Space
-            android:layout_width="6sp"
-            android:layout_height="match_parent" />
-
-        <TextView android:text="-8"
-            android:id="@+id/answerNegative8i"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Space
-            android:layout_width="6sp"
-            android:layout_height="match_parent" />
-
-        <TextView android:text="-7"
-            android:id="@+id/answerNegative7i"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Space
-            android:layout_width="6sp"
-            android:layout_height="match_parent" />
-
-        <TextView android:text="-6"
-            android:id="@+id/answerNegative6i"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Space
-            android:layout_width="6sp"
-            android:layout_height="match_parent" />
-
-        <TextView android:text="-5"
-            android:id="@+id/answerNegative5i"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Space
-            android:layout_width="6sp"
-            android:layout_height="match_parent" />
-
-        <TextView android:text="-4"
-            android:id="@+id/answerNegative4i"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Space
-            android:layout_width="6sp"
-            android:layout_height="match_parent" />
-
-        <TextView android:text="-3"
-            android:id="@+id/answerNegative3i"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Space
-            android:layout_width="6sp"
-            android:layout_height="match_parent" />
-
-        <TextView android:text="-2"
-            android:id="@+id/answerNegative2i"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Space
-            android:layout_width="6sp"
-            android:layout_height="match_parent" />
-
-        <TextView android:text="-1"
-            android:id="@+id/answerNegative1i"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Space
-            android:layout_width="6sp"
-            android:layout_height="match_parent" />
-
         <TextView android:text="0"
-            android:id="@+id/answer0i"
-            android:textSize="15sp"
+            android:id="@+id/answerNegative10i"
+            android:textSize="13sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <Space
-            android:layout_width="6sp"
+            android:layout_width="300sp"
             android:layout_height="match_parent" />
 
-        <TextView android:text="1"
-            android:id="@+id/answer1i"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Space
-            android:layout_width="6sp"
-            android:layout_height="match_parent" />
-
-        <TextView android:text="2"
-            android:id="@+id/answer2i"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Space
-            android:layout_width="6sp"
-            android:layout_height="match_parent" />
-
-        <TextView android:text="3"
-            android:id="@+id/answer3i"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Space
-            android:layout_width="6sp"
-            android:layout_height="match_parent" />
-
-        <TextView android:text="4"
-            android:id="@+id/answer4i"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Space
-            android:layout_width="6sp"
-            android:layout_height="match_parent" />
-
-        <TextView android:text="5"
-            android:id="@+id/answer5i"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Space
-            android:layout_width="6sp"
-            android:layout_height="match_parent" />
-
-        <TextView android:text="6"
-            android:id="@+id/answer6i"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Space
-            android:layout_width="6sp"
-            android:layout_height="match_parent" />
-
-        <TextView android:text="7"
-            android:id="@+id/answer7i"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Space
-            android:layout_width="6sp"
-            android:layout_height="match_parent" />
-
-        <TextView android:text="8"
-            android:id="@+id/answer8i"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Space
-            android:layout_width="6sp"
-            android:layout_height="match_parent" />
-
-        <TextView android:text="9"
-            android:id="@+id/answer9i"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Space
-            android:layout_width="6sp"
-            android:layout_height="match_parent" />
-
-        <TextView android:text="10"
+        <TextView android:text="255"
             android:id="@+id/answer10i"
-            android:textSize="15sp"
+            android:textSize="13sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -541,7 +367,7 @@
         android:layout_weight="0"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:max="21" />
+        android:max="255" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -617,3 +443,5 @@
             android:id="@+id/rollGraph"/>
     </LinearLayout>
 </LinearLayout>
+    </TableLayout>
+</ScrollView>
