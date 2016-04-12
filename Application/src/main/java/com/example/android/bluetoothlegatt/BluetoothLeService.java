@@ -60,8 +60,10 @@ public class BluetoothLeService extends Service {
             "com.example.bluetooth.le.ACTION_GATT_SERVICES_DISCOVERED";
     public final static String ACTION_DATA_AVAILABLE =
             "com.example.bluetooth.le.ACTION_DATA_AVAILABLE";
-    public final static String EXTRA_DATA =
-            "com.example.bluetooth.le.EXTRA_DATA";
+    public final static String VALUE_DATA =
+            "com.example.bluetooth.le.VALUE_DATA";
+    public final static String CHAR_DATA =
+            "com.example.bluetooth.le.CHAR_DATA";
 
 
     // Implements callback methods for GATT events that the app cares about.  For example,
@@ -123,7 +125,8 @@ public class BluetoothLeService extends Service {
 
         // Write data as float in uint32 representation.
         int value = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT32, 0);
-        intent.putExtra(EXTRA_DATA, String.valueOf(Float.intBitsToFloat(value)));
+        intent.putExtra(VALUE_DATA, Float.intBitsToFloat(value));
+        intent.putExtra(CHAR_DATA, characteristic.getUuid().toString());
         sendBroadcast(intent);
     }
 

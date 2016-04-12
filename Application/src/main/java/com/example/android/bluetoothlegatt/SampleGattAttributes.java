@@ -23,19 +23,19 @@ import java.util.HashMap;
  */
 public class SampleGattAttributes {
     private static HashMap<String, String> attributes = new HashMap();
-    public static String ACC_SERVICE_UUID =     "00366e80-cf3a-11e1-9ab4-0002a5d5c51b";
-    public static String ROLL_CHAR_UUID =       "01366e80-cf3a-11e1-9ab4-0002a5d5c51b";
-    public static String PITCH_CHAR_UUID =      "02366e80-cf3a-11e1-9ab4-0002a5d5c51b";
+    public static final String ACC_SERVICE_UUID =     "00366e80-cf3a-11e1-9ab4-0002a5d5c51b";
+    public static final String ROLL_CHAR_UUID =       "01366e80-cf3a-11e1-9ab4-0002a5d5c51b";
+    public static final String PITCH_CHAR_UUID =      "02366e80-cf3a-11e1-9ab4-0002a5d5c51b";
 
-    public static String TEMP_SERVICE_UUID =    "03366e80-cf3a-11e1-9ab4-0002a5d5c51b";
-    public static String TEMP_CHAR_UUID =       "04366e80-cf3a-11e1-9ab4-0002a5d5c51b";
+    public static final String TEMP_SERVICE_UUID =    "03366e80-cf3a-11e1-9ab4-0002a5d5c51b";
+    public static final String TEMP_CHAR_UUID =       "04366e80-cf3a-11e1-9ab4-0002a5d5c51b";
 
-    public static String DOUBLETAP_SERVICE_UUID =    "05366e80-cf3a-11e1-9ab4-0002a5d5c51b";
-    public static String DOUBLETAP_CHAR_UUID =       "06366e80-cf3a-11e1-9ab4-0002a5d5c51b";
+    public static final String DOUBLETAP_SERVICE_UUID =    "05366e80-cf3a-11e1-9ab4-0002a5d5c51b";
+    public static final String DOUBLETAP_CHAR_UUID =       "06366e80-cf3a-11e1-9ab4-0002a5d5c51b";
 
-    public static String LED_SERVICE_UUID =         "07366e80-cf3a-11e1-9ab4-0002a5d5c51b";
-    public static String LED_SPEED_CHAR_UUID =      "08366e80-cf3a-11e1-9ab4-0002a5d5c51b";
-    public static String LED_INTENSITY_CHAR_UUID =  "09366e80-cf3a-11e1-9ab4-0002a5d5c51b";
+    public static final String LED_SERVICE_UUID =         "07366e80-cf3a-11e1-9ab4-0002a5d5c51b";
+    public static final String LED_SPEED_CHAR_UUID =      "08366e80-cf3a-11e1-9ab4-0002a5d5c51b";
+    public static final String LED_INTENSITY_CHAR_UUID =  "09366e80-cf3a-11e1-9ab4-0002a5d5c51b";
 
     static {
         // Accelerometer Service
@@ -58,8 +58,7 @@ public class SampleGattAttributes {
 
     }
 
-    public static String lookup(String uuid, String defaultName) {
-        String name = attributes.get(uuid);
-        return name == null ? defaultName : name;
+    public static String lookup(String uuid) {
+        return attributes.get(uuid);
     }
 }
