@@ -14,7 +14,8 @@
      limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp">
@@ -65,7 +66,554 @@
                   android:text="@string/no_data"
                   android:textSize="18sp"/>
     </LinearLayout>
-    <ExpandableListView android:id="@+id/gatt_services_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </LinearLayout>
+
+    <TextView
+        style="@style/CardView.Light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Speed"
+        android:id="@+id/textView3"
+        android:textSize="25sp"
+        android:layout_gravity="center_horizontal" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:weightSum="1">
+            <TextView android:text="-10"
+                android:id="@+id/answerNegative10"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="6sp"
+                android:layout_height="match_parent" />
+
+            <TextView android:text="-9"
+                android:id="@+id/answerNegative9"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="6sp"
+                android:layout_height="match_parent" />
+
+            <TextView android:text="-8"
+                android:id="@+id/answerNegative8"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="6sp"
+                android:layout_height="match_parent" />
+
+            <TextView android:text="-7"
+                android:id="@+id/answerNegative7"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="6sp"
+                android:layout_height="match_parent" />
+
+            <TextView android:text="-6"
+                android:id="@+id/answerNegative6"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="6sp"
+                android:layout_height="match_parent" />
+
+            <TextView android:text="-5"
+                android:id="@+id/answerNegative5"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="6sp"
+                android:layout_height="match_parent" />
+
+            <TextView android:text="-4"
+                android:id="@+id/answerNegative4"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="6sp"
+                android:layout_height="match_parent" />
+
+            <TextView android:text="-3"
+                android:id="@+id/answerNegative3"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="6sp"
+                android:layout_height="match_parent" />
+
+            <TextView android:text="-2"
+                android:id="@+id/answerNegative2"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="6sp"
+                android:layout_height="match_parent" />
+
+            <TextView android:text="-1"
+                android:id="@+id/answerNegative1"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="6sp"
+                android:layout_height="match_parent" />
+
+            <TextView android:text="0"
+                android:id="@+id/answer0"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="6sp"
+                android:layout_height="match_parent" />
+
+            <TextView android:text="1"
+                android:id="@+id/answer1"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="6sp"
+                android:layout_height="match_parent" />
+
+            <TextView android:text="2"
+                android:id="@+id/answer2"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="6sp"
+                android:layout_height="match_parent" />
+
+            <TextView android:text="3"
+                android:id="@+id/answer3"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="6sp"
+                android:layout_height="match_parent" />
+
+            <TextView android:text="4"
+                android:id="@+id/answer4"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="6sp"
+                android:layout_height="match_parent" />
+
+            <TextView android:text="5"
+                android:id="@+id/answer5"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="6sp"
+                android:layout_height="match_parent" />
+
+            <TextView android:text="6"
+                android:id="@+id/answer6"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="6sp"
+                android:layout_height="match_parent" />
+
+            <TextView android:text="7"
+                android:id="@+id/answer7"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="6sp"
+                android:layout_height="match_parent" />
+
+            <TextView android:text="8"
+                android:id="@+id/answer8"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="6sp"
+                android:layout_height="match_parent" />
+
+            <TextView android:text="9"
+                android:id="@+id/answer9"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="6sp"
+                android:layout_height="match_parent" />
+
+            <TextView android:text="10"
+                android:id="@+id/answer10"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <SeekBar android:id="@+id/speedSlider"
+            android:layout_weight="0"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:max="21" />
+
+        <TextView
+            style="@style/CardView.Light"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Intensity"
+            android:id="@+id/textView4"
+            android:textSize="25sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:weightSum="1">
+        <TextView android:text="-10"
+            android:id="@+id/answerNegative10i"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:layout_width="6sp"
+            android:layout_height="match_parent" />
+
+        <TextView android:text="-9"
+            android:id="@+id/answerNegative9i"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:layout_width="6sp"
+            android:layout_height="match_parent" />
+
+        <TextView android:text="-8"
+            android:id="@+id/answerNegative8i"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:layout_width="6sp"
+            android:layout_height="match_parent" />
+
+        <TextView android:text="-7"
+            android:id="@+id/answerNegative7i"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:layout_width="6sp"
+            android:layout_height="match_parent" />
+
+        <TextView android:text="-6"
+            android:id="@+id/answerNegative6i"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:layout_width="6sp"
+            android:layout_height="match_parent" />
+
+        <TextView android:text="-5"
+            android:id="@+id/answerNegative5i"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:layout_width="6sp"
+            android:layout_height="match_parent" />
+
+        <TextView android:text="-4"
+            android:id="@+id/answerNegative4i"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:layout_width="6sp"
+            android:layout_height="match_parent" />
+
+        <TextView android:text="-3"
+            android:id="@+id/answerNegative3i"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:layout_width="6sp"
+            android:layout_height="match_parent" />
+
+        <TextView android:text="-2"
+            android:id="@+id/answerNegative2i"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:layout_width="6sp"
+            android:layout_height="match_parent" />
+
+        <TextView android:text="-1"
+            android:id="@+id/answerNegative1i"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:layout_width="6sp"
+            android:layout_height="match_parent" />
+
+        <TextView android:text="0"
+            android:id="@+id/answer0i"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:layout_width="6sp"
+            android:layout_height="match_parent" />
+
+        <TextView android:text="1"
+            android:id="@+id/answer1i"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:layout_width="6sp"
+            android:layout_height="match_parent" />
+
+        <TextView android:text="2"
+            android:id="@+id/answer2i"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:layout_width="6sp"
+            android:layout_height="match_parent" />
+
+        <TextView android:text="3"
+            android:id="@+id/answer3i"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:layout_width="6sp"
+            android:layout_height="match_parent" />
+
+        <TextView android:text="4"
+            android:id="@+id/answer4i"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:layout_width="6sp"
+            android:layout_height="match_parent" />
+
+        <TextView android:text="5"
+            android:id="@+id/answer5i"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:layout_width="6sp"
+            android:layout_height="match_parent" />
+
+        <TextView android:text="6"
+            android:id="@+id/answer6i"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:layout_width="6sp"
+            android:layout_height="match_parent" />
+
+        <TextView android:text="7"
+            android:id="@+id/answer7i"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:layout_width="6sp"
+            android:layout_height="match_parent" />
+
+        <TextView android:text="8"
+            android:id="@+id/answer8i"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:layout_width="6sp"
+            android:layout_height="match_parent" />
+
+        <TextView android:text="9"
+            android:id="@+id/answer9i"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:layout_width="6sp"
+            android:layout_height="match_parent" />
+
+        <TextView android:text="10"
+            android:id="@+id/answer10i"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <SeekBar android:id="@+id/intensitySlider"
+        android:layout_weight="0"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:max="21" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Temp:"
+            android:id="@+id/temp"
+            style="@style/CardView.Light"
+            android:textSize="32sp" />
+
+        <Space
+            android:layout_width="30sp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical" />
+
+        <com.jjoe64.graphview.GraphView
+            android:layout_width="240dip"
+            android:layout_height="200dip"
+            android:id="@+id/tempGraph"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" >
+
+        <TextView
+            style="@style/CardView.Light"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Pitch:"
+            android:id="@+id/textView"
+            android:textSize="32sp" />
+
+        <Space
+            android:layout_width="30sp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical" />
+
+        <com.jjoe64.graphview.GraphView
+            android:layout_width="240dip"
+            android:layout_height="200dip"
+            android:id="@+id/pitchGraph"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/CardView.Light"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Roll:"
+            android:id="@+id/textView2"
+            android:textSize="32sp" />
+
+        <Space
+            android:layout_width="30sp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical" />
+
+        <com.jjoe64.graphview.GraphView
+            android:layout_width="240dip"
+            android:layout_height="200dip"
+            android:id="@+id/rollGraph"/>
+    </LinearLayout>
 </LinearLayout>
