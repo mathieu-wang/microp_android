@@ -211,9 +211,6 @@ public class DeviceControlActivity extends Activity {
 
         // Sets up UI references.
         ((TextView) findViewById(R.id.device_address)).setText(mDeviceAddress);
-        //TODO: figure out how to reconcile the two
-        //mGattServicesList = (ExpandableListView) findViewById(R.id.gatt_services_list);
-        //mGattServicesList.setOnChildClickListener(servicesListClickListner);
         mConnectionState = (TextView) findViewById(R.id.connection_state);
         mDataField = (TextView) findViewById(R.id.data_value);
 
@@ -303,12 +300,6 @@ public class DeviceControlActivity extends Activity {
     private Runnable mTimer1;
     private LineGraphSeries<DataPoint> tempData;
     private double graph2LastXValue = 5d;
-
-//    double mLastRandom = 2;
-//    Random mRand = new Random();
-//    private double getRandom() {
-//        return mLastRandom += mRand.nextDouble() * 0.5 - 0.25;
-//    }
 
     @Override
     protected void onResume() {
@@ -401,10 +392,7 @@ public class DeviceControlActivity extends Activity {
     // on the UI.
     private void loadGattServices(List<BluetoothGattService> gattServices) {
         if (gattServices == null) return;
-        String uuid = null;
-//        ArrayList<HashMap<String, String>> gattServiceData = new ArrayList<>();
-//        ArrayList<ArrayList<HashMap<String, String>>> gattCharacteristicData = new ArrayList<>();
-//        mGattCharacteristics = new ArrayList<>();
+        String uuid;
 
         // Loops through available GATT Services.
         for (BluetoothGattService gattService : gattServices) {
@@ -426,19 +414,6 @@ public class DeviceControlActivity extends Activity {
                 characteristicMap.put(uuid, gattCharacteristic);
             }
         }
-
-//        SimpleExpandableListAdapter gattServiceAdapter = new SimpleExpandableListAdapter(
-//                this,
-//                gattServiceData,
-//                android.R.layout.simple_expandable_list_item_2,
-//                new String[] {LIST_NAME, LIST_UUID},
-//                new int[] { android.R.id.text1, android.R.id.text2 },
-//                gattCharacteristicData,
-//                android.R.layout.simple_expandable_list_item_2,
-//                new String[] {LIST_NAME, LIST_UUID},
-//                new int[] { android.R.id.text1, android.R.id.text2 }
-//        );
-//        mGattServicesList.setAdapter(gattServiceAdapter);
     }
 
     private static IntentFilter makeGattUpdateIntentFilter() {
