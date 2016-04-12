@@ -72,10 +72,7 @@ public class DeviceControlActivity extends Activity {
     private boolean mConnected = false;
     private BluetoothGattCharacteristic mNotifyCharacteristic;
 
-    private final String LIST_NAME = "NAME";
-    private final String LIST_UUID = "UUID";
-
-    private double lastTemp = 0;
+    private double lastTemp = 30;
     private double lastRoll = 0;
     private double lastPitch = 0;
 
@@ -126,13 +123,19 @@ public class DeviceControlActivity extends Activity {
                 double value = intent.getFloatExtra(BluetoothLeService.VALUE_DATA, 30);
                 switch (uuid) {
                     case SampleGattAttributes.TEMP_CHAR_UUID:
-                        lastTemp = value;
+                        if (5 < value && value < 100) {
+                            lastTemp = value;
+                        }
                         break;
                     case SampleGattAttributes.ROLL_CHAR_UUID:
-                        lastRoll = value;
+                        if (0 <= value && value <= 180) {
+                            lastRoll = value;
+                        }
                         break;
                     case SampleGattAttributes.PITCH_CHAR_UUID:
-                        lastPitch = value;
+                        if (0 <= value && value <= 180) {
+                            lastPitch = value;
+                        }
                         break;
                 }
             }
@@ -323,7 +326,7 @@ public class DeviceControlActivity extends Activity {
                 graph2LastXValue += 1d;
                 readTemperature();
                 tempData.appendData(new DataPoint(graph2LastXValue, lastTemp), true, 60);
-                mHandler.postDelayed(this, 200);
+                mHandler.postDelayed(this, 500);
             }
         };
         mHandler.postDelayed(mTimer1, 1000);
@@ -381,7 +384,7 @@ public class DeviceControlActivity extends Activity {
     }
 
     private void readTemperature() {
-        if (!mGattCharacteristics.containsKey(SampleGattAttributes.TEMP_SERVICE_UUID)
+        if (mBluetoothLeService == null || !mGattCharacteristics.containsKey(SampleGattAttributes.TEMP_SERVICE_UUID)
                 || !mGattCharacteristics.get(SampleGattAttributes.TEMP_SERVICE_UUID)
                     .containsKey(SampleGattAttributes.TEMP_CHAR_UUID)) {
             return;
@@ -389,17 +392,7 @@ public class DeviceControlActivity extends Activity {
         final BluetoothGattCharacteristic tempChar =
                 mGattCharacteristics.get(SampleGattAttributes.TEMP_SERVICE_UUID)
                         .get(SampleGattAttributes.TEMP_CHAR_UUID);
-        final int charaProp = tempChar.getProperties();
-        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
-            // If there is an active notification on a characteristic, clear
-            // it first so it doesn't update the data field on the user interface.
-            if (mNotifyCharacteristic != null) {
-                mBluetoothLeService.setCharacteristicNotification(
-                        mNotifyCharacteristic, false);
-                mNotifyCharacteristic = null;
-            }
-            mBluetoothLeService.readCharacteristic(tempChar);
-        }
+        mBluetoothLeService.readCharacteristic(tempChar);
     }
 
 
