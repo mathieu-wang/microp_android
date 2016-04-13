@@ -28,7 +28,6 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -235,6 +234,20 @@ public class DeviceControlActivity extends Activity {
         tempGraph.getViewport().setMinX(0);
         tempGraph.getViewport().setMaxX(60);
 
+        GraphView pitchGraph = (GraphView)findViewById(R.id.pitchGraph);
+        pitchData = new LineGraphSeries<DataPoint>();
+        pitchGraph.addSeries(pitchData);
+        pitchGraph.getViewport().setXAxisBoundsManual(true);
+        pitchGraph.getViewport().setMinX(0);
+        pitchGraph.getViewport().setMaxX(60);
+
+        GraphView rollGraph = (GraphView)findViewById(R.id.rollGraph);
+        rollData = new LineGraphSeries<DataPoint>();
+        rollGraph.addSeries(rollData);
+        rollGraph.getViewport().setXAxisBoundsManual(true);
+        rollGraph.getViewport().setMinX(0);
+        rollGraph.getViewport().setMaxX(60);
+
     }
 
     private SeekBar.OnSeekBarChangeListener speedSelectorListener =
@@ -262,16 +275,22 @@ public class DeviceControlActivity extends Activity {
             R.id.answer6,R.id.answer7,R.id.answer8,R.id.answer9,R.id.answer10,};
 
     private void updateSpeedTextSize(int currentSpeed) {
-        TextView selectedSpeed = (TextView) findViewById(speeds[currentSpeed]);
-        selectedSpeed.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        TextView selectedSpeed;
+
+        for (int i = 0; i < speeds.length; i++) {
+            selectedSpeed = (TextView) findViewById(speeds[i]);
+            selectedSpeed.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
+        }
+
+        selectedSpeed = (TextView) findViewById(speeds[currentSpeed]);
+        selectedSpeed.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
     }
 
     private SeekBar.OnSeekBarChangeListener intensitySelectorListener =
             new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    updateIntensityTextSize(progress);
-                    //TODO: add in function that actually sends the intensity to the board
+                    //TODO: send data
                 }
 
                 @Override
@@ -285,21 +304,14 @@ public class DeviceControlActivity extends Activity {
                 }
             };
 
-    private int[] intensities = {R.id.answerNegative10i,R.id.answerNegative9i,R.id.answerNegative8i,R.id.answerNegative7i,
-            R.id.answerNegative6i,R.id.answerNegative5i,R.id.answerNegative4i,R.id.answerNegative3i,R.id.answerNegative2i,
-            R.id.answerNegative1i,R.id.answer0i,R.id.answer1i,R.id.answer2i,R.id.answer3i,R.id.answer4i,R.id.answer5i,
-            R.id.answer6i,R.id.answer7i,R.id.answer8i,R.id.answer9i,R.id.answer10i,};
-
-    private void updateIntensityTextSize(int currentIntensity) {
-        TextView selectedIntensity = (TextView) findViewById(speeds[currentIntensity]);
-        selectedIntensity.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-    }
-
     //TODO: move this to the top
     private final Handler mHandler = new Handler();
     private Runnable mTimer1;
     private LineGraphSeries<DataPoint> tempData;
-    private double graph2LastXValue = 5d;
+    private LineGraphSeries<DataPoint> pitchData;
+    private LineGraphSeries<DataPoint> rollData;
+    private double graphLastXValue = 5d;
+
 
     @Override
     protected void onResume() {
@@ -314,10 +326,12 @@ public class DeviceControlActivity extends Activity {
         mTimer1 = new Runnable() {
             @Override
             public void run() {
-                graph2LastXValue += 1d;
+                graphLastXValue += 1d;
                 readTemperature();
-                tempData.appendData(new DataPoint(graph2LastXValue, lastTemp), true, 60);
-                mHandler.postDelayed(this, 500);
+                tempData.appendData(new DataPoint(graphLastXValue, lastTemp), true, 60);
+                pitchData.appendData(new DataPoint(graphLastXValue, lastPitch), true, 60);
+                rollData.appendData(new DataPoint(graphLastXValue, lastRoll), true, 60);
+                mHandler.postDelayed(this, 200);
             }
         };
         mHandler.postDelayed(mTimer1, 1000);
