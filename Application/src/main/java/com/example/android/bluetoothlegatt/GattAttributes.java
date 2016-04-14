@@ -36,6 +36,7 @@ public class GattAttributes {
     public static final String LED_SERVICE_UUID =         "07366e80-cf3a-11e1-9ab4-0002a5d5c51b";
     public static final String LED_SPEED_CHAR_UUID =      "08366e80-cf3a-11e1-9ab4-0002a5d5c51b";
     public static final String LED_INTENSITY_CHAR_UUID =  "09366e80-cf3a-11e1-9ab4-0002a5d5c51b";
+    public static final String CLIENT_CHARACTERISTIC_CONFIG = "00002902-0000-1000-8000-00805f9b34fb";
 
     static {
         // Accelerometer Service
@@ -49,7 +50,7 @@ public class GattAttributes {
 
         // Doubletap Service
         attributes.put(DOUBLETAP_SERVICE_UUID, "Double Tap Service");
-        attributes.put(DOUBLETAP_CHAR_UUID, "Doble Tap Notification");
+        attributes.put(DOUBLETAP_CHAR_UUID, "Double Tap Notification");
 
         // LED Service
         attributes.put(LED_SERVICE_UUID, "LED Service");

@@ -18,6 +18,7 @@ package com.example.android.bluetoothlegatt;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -46,6 +47,7 @@ import java.nio.ByteOrder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * For a given BLE device, this Activity provides the user interface to connect, display data,
@@ -133,6 +135,8 @@ public class DeviceControlActivity extends Activity {
                             lastPitch = value;
                         }
                         break;
+                    case GattAttributes.DOUBLETAP_CHAR_UUID:
+                        System.out.println("DOUBLE TAP: " + value);
                 }
             }
         }
@@ -197,7 +201,6 @@ public class DeviceControlActivity extends Activity {
         rollGraph.getViewport().setMaxX(60);
         rollGraph.getViewport().setMinY(0);
         rollGraph.getViewport().setMaxY(180);
-
     }
 
     private SeekBar.OnSeekBarChangeListener speedSelectorListener =
@@ -260,6 +263,7 @@ public class DeviceControlActivity extends Activity {
     private Runnable tempValueThread;
     private Runnable rollValueThread;
     private Runnable pitchValueThread;
+    private Runnable doubleTapThread;
     private LineGraphSeries<DataPoint> tempData;
     private LineGraphSeries<DataPoint> pitchData;
     private LineGraphSeries<DataPoint> rollData;
@@ -304,7 +308,7 @@ public class DeviceControlActivity extends Activity {
                 mHandler.postDelayed(this, 1000);
             }
         };
-        mHandler.postDelayed(tempValueThread, 0);
+        mHandler.postDelayed(tempValueThread, 50);
 
         rollValueThread = new Runnable() {
             @Override
@@ -323,6 +327,18 @@ public class DeviceControlActivity extends Activity {
             }
         };
         mHandler.postDelayed(pitchValueThread, 300);
+
+        doubleTapThread = new Runnable() {
+            @Override
+            public void run() {
+                if (mBluetoothLeService != null) {
+                    setDoubleTap();
+                    mHandler.removeCallbacks(this);
+                }
+                mHandler.postDelayed(this, 0);
+            }
+        };
+        mHandler.postDelayed(doubleTapThread, 0);
     }
 
     @Override
@@ -388,6 +404,12 @@ public class DeviceControlActivity extends Activity {
         readCharacteristic(GattAttributes.ACC_SERVICE_UUID, GattAttributes.PITCH_CHAR_UUID);
     }
 
+    private void setDoubleTap() {
+        setCharacteristicNotification(GattAttributes.DOUBLETAP_SERVICE_UUID,
+                GattAttributes.DOUBLETAP_CHAR_UUID);
+    }
+
+
     private void readCharacteristic(String serviceUuid, String characteristicsUuid) {
         if (mBluetoothLeService == null || !mGattCharacteristics.containsKey(serviceUuid)
                 || !mGattCharacteristics.get(serviceUuid).containsKey(characteristicsUuid)) {
@@ -397,6 +419,17 @@ public class DeviceControlActivity extends Activity {
                 mGattCharacteristics.get(serviceUuid).get(characteristicsUuid);
         mBluetoothLeService.readCharacteristic(characteristic);
     }
+
+    private void setCharacteristicNotification(String serviceUuid, String characteristicsUuid) {
+        if (mBluetoothLeService == null || !mGattCharacteristics.containsKey(serviceUuid)
+                || !mGattCharacteristics.get(serviceUuid).containsKey(characteristicsUuid)) {
+            return;
+        }
+        final BluetoothGattCharacteristic characteristic =
+                mGattCharacteristics.get(serviceUuid).get(characteristicsUuid);
+        mBluetoothLeService.setCharacteristicNotification(characteristic, true);
+    }
+
 
     private void writeLedIntensity(int intensity) {
         writeCharacteristic(GattAttributes.LED_SERVICE_UUID,

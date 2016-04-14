@@ -287,6 +287,12 @@ public class BluetoothLeService extends Service {
             return;
         }
         mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
+
+        // 0x2902 org.bluetooth.descriptor.gatt.client_characteristic_configuration.xml
+        UUID uuid = UUID.fromString(GattAttributes.CLIENT_CHARACTERISTIC_CONFIG);
+        BluetoothGattDescriptor descriptor = characteristic.getDescriptor(uuid);
+        descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+        mBluetoothGatt.writeDescriptor(descriptor);
     }
 
     /**
