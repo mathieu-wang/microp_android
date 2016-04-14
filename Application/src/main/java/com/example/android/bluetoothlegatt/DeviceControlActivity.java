@@ -73,7 +73,6 @@ public class DeviceControlActivity extends Activity {
 
     private boolean setDoubleTap;
 
-
     // Code to manage Service lifecycle.
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
@@ -147,7 +146,7 @@ public class DeviceControlActivity extends Activity {
                 String uuid = intent.getStringExtra(BluetoothLeService.CHAR_DATA);
                 if (GattAttributes.DOUBLETAP_CHAR_UUID.equals(uuid)) {
                     Intent myAct = new Intent(context, DeviceControlActivity.class);
-                    myAct.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    myAct.setFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
                     context.startActivity(myAct);
                 }
             }
@@ -367,6 +366,9 @@ public class DeviceControlActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
+        mHandler.removeCallbacks(tempValueThread);
+        mHandler.removeCallbacks(rollValueThread);
+        mHandler.removeCallbacks(pitchValueThread);
         unregisterReceiver(mGattUpdateReceiver);
         registerReceiver(mGattNotifReceiver, makeGattNotifIntentFilter());
     }
