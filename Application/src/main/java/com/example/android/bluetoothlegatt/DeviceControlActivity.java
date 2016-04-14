@@ -18,7 +18,6 @@ package com.example.android.bluetoothlegatt;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -33,9 +32,8 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ExpandableListView;
+import android.view.WindowManager;
 import android.widget.SeekBar;
-import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
@@ -47,7 +45,6 @@ import java.nio.ByteOrder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * For a given BLE device, this Activity provides the user interface to connect, display data,
@@ -137,8 +134,6 @@ public class DeviceControlActivity extends Activity {
                             lastPitch = value;
                         }
                         break;
-                    case GattAttributes.DOUBLETAP_CHAR_UUID:
-                        System.out.println("DOUBLE TAP: " + value);
                 }
             }
         }
@@ -151,7 +146,9 @@ public class DeviceControlActivity extends Activity {
             if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 String uuid = intent.getStringExtra(BluetoothLeService.CHAR_DATA);
                 if (GattAttributes.DOUBLETAP_CHAR_UUID.equals(uuid)) {
-                    System.out.println("WAKE UP!");
+                    Intent myAct = new Intent(context, DeviceControlActivity.class);
+                    myAct.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(myAct);
                 }
             }
         }
@@ -284,6 +281,14 @@ public class DeviceControlActivity extends Activity {
     private LineGraphSeries<DataPoint> rollData;
     private double graphLastXValue = 5d;
 
+    private void wakeUp() {
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
+                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON,
+                        WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
+                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+    }
 
     @Override
     protected void onResume() {
@@ -294,6 +299,9 @@ public class DeviceControlActivity extends Activity {
         } catch (IllegalArgumentException e) {
             System.out.println("mGattNotifReceiver not registered. Ignored");
         }
+
+        wakeUp();
+
         if (mBluetoothLeService != null) {
             final boolean result = mBluetoothLeService.connect(mDeviceAddress);
             Log.d(TAG, "Connect request result=" + result);
