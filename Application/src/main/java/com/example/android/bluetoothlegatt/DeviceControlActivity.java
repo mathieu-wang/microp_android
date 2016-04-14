@@ -144,6 +144,19 @@ public class DeviceControlActivity extends Activity {
         }
     };
 
+    private final BroadcastReceiver mGattNotifReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
+                String uuid = intent.getStringExtra(BluetoothLeService.CHAR_DATA);
+                if (GattAttributes.DOUBLETAP_CHAR_UUID.equals(uuid)) {
+                    System.out.println("WAKE UP!");
+                }
+            }
+        }
+    };
+
     private void clearUI() {
         //TODO: clear ui
     }
@@ -265,6 +278,7 @@ public class DeviceControlActivity extends Activity {
     private Runnable tempValueThread;
     private Runnable rollValueThread;
     private Runnable pitchValueThread;
+    private Runnable doubleTapMonitorThread;
     private LineGraphSeries<DataPoint> tempData;
     private LineGraphSeries<DataPoint> pitchData;
     private LineGraphSeries<DataPoint> rollData;
@@ -275,6 +289,11 @@ public class DeviceControlActivity extends Activity {
     protected void onResume() {
         super.onResume();
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+        try {
+            this.unregisterReceiver(mGattNotifReceiver);
+        } catch (IllegalArgumentException e) {
+            System.out.println("mGattNotifReceiver not registered. Ignored");
+        }
         if (mBluetoothLeService != null) {
             final boolean result = mBluetoothLeService.connect(mDeviceAddress);
             Log.d(TAG, "Connect request result=" + result);
@@ -341,6 +360,7 @@ public class DeviceControlActivity extends Activity {
     protected void onPause() {
         super.onPause();
         unregisterReceiver(mGattUpdateReceiver);
+        registerReceiver(mGattNotifReceiver, makeGattNotifIntentFilter());
     }
 
     @Override
@@ -486,6 +506,12 @@ public class DeviceControlActivity extends Activity {
         intentFilter.addAction(BluetoothLeService.ACTION_GATT_CONNECTED);
         intentFilter.addAction(BluetoothLeService.ACTION_GATT_DISCONNECTED);
         intentFilter.addAction(BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED);
+        intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
+        return intentFilter;
+    }
+
+    private static IntentFilter makeGattNotifIntentFilter() {
+        final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
         return intentFilter;
     }
