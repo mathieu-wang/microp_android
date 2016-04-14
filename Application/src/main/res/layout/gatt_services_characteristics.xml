@@ -336,7 +336,7 @@
             android:layout_width="300sp"
             android:layout_height="match_parent" />
 
-        <TextView android:text="255"
+        <TextView android:text="Max"
             android:id="@+id/answer10i"
             android:textSize="13sp"
             android:layout_width="wrap_content"
@@ -347,7 +347,7 @@
         android:layout_weight="0"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:max="255" />
+        android:max="2147483647" />
 
     <LinearLayout
         android:orientation="horizontal"

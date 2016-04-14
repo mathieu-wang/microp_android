@@ -41,6 +41,8 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,10 +60,8 @@ public class DeviceControlActivity extends Activity {
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
 
     private TextView mConnectionState;
-    private TextView mDataField;
     private String mDeviceName;
     private String mDeviceAddress;
-    private ExpandableListView mGattServicesList;
     private BluetoothLeService mBluetoothLeService;
     private Map<String, Map<String, BluetoothGattCharacteristic>> mGattCharacteristics
             = new HashMap<>();
@@ -138,62 +138,8 @@ public class DeviceControlActivity extends Activity {
         }
     };
 
-    // If a given GATT characteristic is selected, check for supported features.  This sample
-    // demonstrates 'Read' and 'Notify' features.  See
-    // http://d.android.com/reference/android/bluetooth/BluetoothGatt.html for the complete
-    // list of supported characteristic features.
-//    private final ExpandableListView.OnChildClickListener servicesListClickListner =
-//            new ExpandableListView.OnChildClickListener() {
-//                @Override
-//                public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
-//                                            int childPosition, long id) {
-//                    if (mGattCharacteristics != null) {
-//                        final BluetoothGattCharacteristic characteristic =
-//                                mGattCharacteristics.get(groupPosition).get(childPosition);
-//                        final int charaProp = characteristic.getProperties();
-//                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
-//                            // If there is an active notification on a characteristic, clear
-//                            // it first so it doesn't update the data field on the user interface.
-//                            if (mNotifyCharacteristic != null) {
-//                                mBluetoothLeService.setCharacteristicNotification(
-//                                        mNotifyCharacteristic, false);
-//                                mNotifyCharacteristic = null;
-//                            }
-//                            mBluetoothLeService.readCharacteristic(characteristic);
-//                        }
-//                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_WRITE) > 0) {
-//                            // If there is an active notification on a characteristic, clear
-//                            // it first so it doesn't update the data field on the user interface.
-//                            if (mNotifyCharacteristic != null) {
-//                                mBluetoothLeService.setCharacteristicNotification(
-//                                        mNotifyCharacteristic, false);
-//                                mNotifyCharacteristic = null;
-//                            }
-//                            byte byteToWrite = 0;
-//                            if (characteristic.getUuid().toString().equals(GattAttributes.LED_SPEED_CHAR_UUID)) {
-//                                byteToWrite = 12; //TODO: get actual speed value
-//                            } else if (characteristic.getUuid().toString().equals(GattAttributes.LED_INTENSITY_CHAR_UUID)) {
-//                                byteToWrite = 8; //TODO: get actual intensity value
-//                            }
-//                            byte[] bytes = new byte[1];
-//                            bytes[0] = byteToWrite;
-//                            characteristic.setValue(bytes);
-//                            mBluetoothLeService.writeCharacteristic(characteristic);
-//                        }
-//                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
-//                            mNotifyCharacteristic = characteristic;
-//                            mBluetoothLeService.setCharacteristicNotification(
-//                                    characteristic, true);
-//                        }
-//                        return true;
-//                    }
-//                    return false;
-//                }
-//    };
-
     private void clearUI() {
-        mGattServicesList.setAdapter((SimpleExpandableListAdapter) null);
-        mDataField.setText(R.string.no_data);
+        //TODO: clear ui
     }
 
     @Override
@@ -258,8 +204,8 @@ public class DeviceControlActivity extends Activity {
             new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    writeLedSpeed(progress);
                     updateSpeedTextSize(progress);
-                    //TODO: add in function that actually sends the speed to the board
                 }
 
                 @Override
@@ -294,7 +240,7 @@ public class DeviceControlActivity extends Activity {
             new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    //TODO: send data
+                    writeLedIntensity(progress);
                 }
 
                 @Override
@@ -450,6 +396,31 @@ public class DeviceControlActivity extends Activity {
         final BluetoothGattCharacteristic characteristic =
                 mGattCharacteristics.get(serviceUuid).get(characteristicsUuid);
         mBluetoothLeService.readCharacteristic(characteristic);
+    }
+
+    private void writeLedIntensity(int intensity) {
+        writeCharacteristic(GattAttributes.LED_SERVICE_UUID,
+                GattAttributes.LED_INTENSITY_CHAR_UUID, intensity);
+    }
+
+    private void writeLedSpeed(int speed) {
+        writeCharacteristic(GattAttributes.LED_SERVICE_UUID,
+                GattAttributes.LED_SPEED_CHAR_UUID, speed);
+    }
+
+    private void writeCharacteristic(String serviceUuid, String characteristicsUuid, int data) {
+        if (mBluetoothLeService == null || !mGattCharacteristics.containsKey(serviceUuid)
+                || !mGattCharacteristics.get(serviceUuid).containsKey(characteristicsUuid)) {
+            return;
+        }
+        final BluetoothGattCharacteristic characteristic =
+                mGattCharacteristics.get(serviceUuid).get(characteristicsUuid);
+        characteristic.setValue(intToByteArray(data));
+        mBluetoothLeService.writeCharacteristic(characteristic);
+    }
+
+    public byte[] intToByteArray(int value) {
+        return ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(value).array();
     }
 
     // Demonstrates how to iterate through the supported GATT Services/Characteristics.
