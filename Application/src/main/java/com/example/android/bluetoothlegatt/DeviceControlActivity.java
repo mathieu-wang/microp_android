@@ -364,7 +364,7 @@ public class DeviceControlActivity extends Activity {
             @Override
             public void run() {
                 readRoll();
-                mHandler.postDelayed(this, 300);
+                mHandler.postDelayed(this, 500);
             }
         };
         mHandler.postDelayed(rollValueThread, 100);
@@ -373,10 +373,10 @@ public class DeviceControlActivity extends Activity {
             @Override
             public void run() {
                 readPitch();
-                mHandler.postDelayed(this, 300);
+                mHandler.postDelayed(this, 500);
             }
         };
-        mHandler.postDelayed(pitchValueThread, 200);
+        mHandler.postDelayed(pitchValueThread, 300);
     }
 
     @Override
