@@ -60,22 +60,6 @@
                   android:text="@string/disconnected"
                   android:textSize="18sp"/>
     </LinearLayout>
-    <LinearLayout android:orientation="horizontal"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_margin="10dp">
-        <TextView android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:text="@string/label_data"
-                  android:textSize="18sp"/>
-        <Space android:layout_width="5dp"
-               android:layout_height="wrap_content"/>
-        <TextView android:id="@+id/data_value"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:text="@string/no_data"
-                  android:textSize="18sp"/>
-    </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -85,11 +69,7 @@
     </LinearLayout>
 
 
-    <ExpandableListView android:id="@+id/gatt_services_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <TextView
+        <TextView
         style="@style/CardView.Light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -374,15 +354,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal">
-
-        <TextView
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="Temp:"
-            android:id="@+id/temp"
-            style="@style/CardView.Light"
-            android:textSize="32sp" />
-
+            android:layout_gravity="center_vertical">
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Temp:"
+                android:id="@+id/temp"
+                style="@style/CardView.Light"
+                android:textSize="32sp" />
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="0.00"
+                android:id="@+id/tempValue"
+                style="@style/CardView.Light"
+                android:textSize="32sp" />
+        </LinearLayout>
         <Space
             android:layout_width="30sp"
             android:layout_height="match_parent"
@@ -397,17 +388,63 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal" >
-
-        <TextView
-            style="@style/CardView.Light"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="Pitch:"
-            android:id="@+id/textView"
-            android:textSize="32sp" />
+            android:layout_gravity="center_vertical">
+            <TextView
+                style="@style/CardView.Light"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Roll:"
+                android:id="@+id/roll"
+                android:textSize="32sp" />
+            <TextView
+                style="@style/CardView.Light"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="0.00"
+                android:id="@+id/rollValue"
+                android:textSize="32sp" />
+        </LinearLayout>
+        <Space
+            android:layout_width="30sp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical" />
 
+        <com.jjoe64.graphview.GraphView
+            android:layout_width="240dip"
+            android:layout_height="200dip"
+            android:id="@+id/rollGraph"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" >
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical">
+            <TextView
+                style="@style/CardView.Light"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Pitch:"
+                android:id="@+id/pitch"
+                android:textSize="32sp" />
+            <TextView
+                style="@style/CardView.Light"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="0.00"
+                android:id="@+id/pitchValue"
+                android:textSize="32sp" />
+        </LinearLayout>
         <Space
             android:layout_width="30sp"
             android:layout_height="match_parent"
@@ -419,29 +456,6 @@
             android:id="@+id/pitchGraph"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            style="@style/CardView.Light"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="Roll:"
-            android:id="@+id/textView2"
-            android:textSize="32sp" />
-
-        <Space
-            android:layout_width="30sp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical" />
-
-        <com.jjoe64.graphview.GraphView
-            android:layout_width="240dip"
-            android:layout_height="200dip"
-            android:id="@+id/rollGraph"/>
-    </LinearLayout>
 </LinearLayout>
     </TableLayout>
 </ScrollView>

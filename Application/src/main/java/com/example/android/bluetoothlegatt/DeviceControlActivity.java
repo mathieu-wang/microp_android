@@ -208,7 +208,6 @@ public class DeviceControlActivity extends Activity {
         // Sets up UI references.
         ((TextView) findViewById(R.id.device_address)).setText(mDeviceAddress);
         mConnectionState = (TextView) findViewById(R.id.connection_state);
-        mDataField = (TextView) findViewById(R.id.data_value);
 
         getActionBar().setTitle(mDeviceName);
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -221,7 +220,7 @@ public class DeviceControlActivity extends Activity {
 
         SeekBar intensitySelector = (SeekBar) findViewById(R.id.intensitySlider);
         intensitySelector.setOnSeekBarChangeListener(intensitySelectorListener);
-        
+
         // the board values graphs
         GraphView tempGraph = (GraphView)findViewById(R.id.tempGraph);
         tempData = new LineGraphSeries<DataPoint>();
@@ -336,12 +335,15 @@ public class DeviceControlActivity extends Activity {
             public void run() {
                 graphLastXValue += 1d;
                 if (lastTemp != 0) {
+                    ((TextView)findViewById(R.id.tempValue)).setText(String.format ("%.2f", lastTemp));
                     tempData.appendData(new DataPoint(graphLastXValue, lastTemp), true, 60);
                 }
                 if (lastRoll != 0) {
+                    ((TextView)findViewById(R.id.rollValue)).setText(String.format ("%.2f", lastRoll));
                     rollData.appendData(new DataPoint(graphLastXValue, lastRoll), true, 60);
                 }
                 if (lastPitch != 0) {
+                    ((TextView)findViewById(R.id.pitchValue)).setText(String.format ("%.2f", lastPitch));
                     pitchData.appendData(new DataPoint(graphLastXValue, lastPitch), true, 60);
                 }
                 mHandler.postDelayed(this, 200);
