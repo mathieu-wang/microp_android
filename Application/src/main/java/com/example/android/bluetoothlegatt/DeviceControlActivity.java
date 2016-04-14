@@ -74,6 +74,8 @@ public class DeviceControlActivity extends Activity {
     private double lastRoll;
     private double lastPitch;
 
+    private boolean setDoubleTap;
+
 
     // Code to manage Service lifecycle.
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -263,7 +265,6 @@ public class DeviceControlActivity extends Activity {
     private Runnable tempValueThread;
     private Runnable rollValueThread;
     private Runnable pitchValueThread;
-    private Runnable doubleTapThread;
     private LineGraphSeries<DataPoint> tempData;
     private LineGraphSeries<DataPoint> pitchData;
     private LineGraphSeries<DataPoint> rollData;
@@ -283,6 +284,13 @@ public class DeviceControlActivity extends Activity {
         graphUpdateThread = new Runnable() {
             @Override
             public void run() {
+                if (mBluetoothLeService != null
+                        && mGattCharacteristics.containsKey(GattAttributes.DOUBLETAP_SERVICE_UUID)
+                        && !setDoubleTap) {
+                    setDoubleTap();
+                    setDoubleTap = true;
+                }
+
                 graphLastXValue += 1d;
                 if (lastTemp != 0) {
                     ((TextView)findViewById(R.id.tempValue)).setText(String.format ("%.2f", lastTemp));
@@ -327,18 +335,6 @@ public class DeviceControlActivity extends Activity {
             }
         };
         mHandler.postDelayed(pitchValueThread, 300);
-
-        doubleTapThread = new Runnable() {
-            @Override
-            public void run() {
-                if (mBluetoothLeService != null) {
-                    setDoubleTap();
-                    mHandler.removeCallbacks(this);
-                }
-                mHandler.postDelayed(this, 0);
-            }
-        };
-        mHandler.postDelayed(doubleTapThread, 0);
     }
 
     @Override
