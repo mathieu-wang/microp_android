@@ -32,7 +32,6 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.SeekBar;
 import android.widget.SimpleExpandableListAdapter;
@@ -42,11 +41,9 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * For a given BLE device, this Activity provides the user interface to connect, display data,
@@ -71,9 +68,9 @@ public class DeviceControlActivity extends Activity {
     private boolean mConnected = false;
     private BluetoothGattCharacteristic mNotifyCharacteristic;
 
-    private double lastTemp = 30;
-    private double lastRoll = 0;
-    private double lastPitch = 0;
+    private double lastTemp;
+    private double lastRoll;
+    private double lastPitch;
 
 
     // Code to manage Service lifecycle.
@@ -121,18 +118,18 @@ public class DeviceControlActivity extends Activity {
                 String uuid = intent.getStringExtra(BluetoothLeService.CHAR_DATA);
                 double value = intent.getFloatExtra(BluetoothLeService.VALUE_DATA, 30);
                 switch (uuid) {
-                    case SampleGattAttributes.TEMP_CHAR_UUID:
+                    case GattAttributes.TEMP_CHAR_UUID:
                         if (5 < value && value < 100) {
                             lastTemp = value;
                         }
                         break;
-                    case SampleGattAttributes.ROLL_CHAR_UUID:
-                        if (0 <= value && value <= 180) {
+                    case GattAttributes.ROLL_CHAR_UUID:
+                        if (0 < value && value < 180) {
                             lastRoll = value;
                         }
                         break;
-                    case SampleGattAttributes.PITCH_CHAR_UUID:
-                        if (0 <= value && value <= 180) {
+                    case GattAttributes.PITCH_CHAR_UUID:
+                        if (0 < value && value < 180) {
                             lastPitch = value;
                         }
                         break;
@@ -173,9 +170,9 @@ public class DeviceControlActivity extends Activity {
 //                                mNotifyCharacteristic = null;
 //                            }
 //                            byte byteToWrite = 0;
-//                            if (characteristic.getUuid().toString().equals(SampleGattAttributes.LED_SPEED_CHAR_UUID)) {
+//                            if (characteristic.getUuid().toString().equals(GattAttributes.LED_SPEED_CHAR_UUID)) {
 //                                byteToWrite = 12; //TODO: get actual speed value
-//                            } else if (characteristic.getUuid().toString().equals(SampleGattAttributes.LED_INTENSITY_CHAR_UUID)) {
+//                            } else if (characteristic.getUuid().toString().equals(GattAttributes.LED_INTENSITY_CHAR_UUID)) {
 //                                byteToWrite = 8; //TODO: get actual intensity value
 //                            }
 //                            byte[] bytes = new byte[1];
@@ -224,29 +221,37 @@ public class DeviceControlActivity extends Activity {
 
         SeekBar intensitySelector = (SeekBar) findViewById(R.id.intensitySlider);
         intensitySelector.setOnSeekBarChangeListener(intensitySelectorListener);
-
-
+        
         // the board values graphs
         GraphView tempGraph = (GraphView)findViewById(R.id.tempGraph);
         tempData = new LineGraphSeries<DataPoint>();
         tempGraph.addSeries(tempData);
         tempGraph.getViewport().setXAxisBoundsManual(true);
+        tempGraph.getViewport().setYAxisBoundsManual(true);
         tempGraph.getViewport().setMinX(0);
         tempGraph.getViewport().setMaxX(60);
+        tempGraph.getViewport().setMinY(30);
+        tempGraph.getViewport().setMaxY(40);
 
         GraphView pitchGraph = (GraphView)findViewById(R.id.pitchGraph);
         pitchData = new LineGraphSeries<DataPoint>();
         pitchGraph.addSeries(pitchData);
         pitchGraph.getViewport().setXAxisBoundsManual(true);
+        pitchGraph.getViewport().setYAxisBoundsManual(true);
         pitchGraph.getViewport().setMinX(0);
         pitchGraph.getViewport().setMaxX(60);
+        pitchGraph.getViewport().setMinY(0);
+        pitchGraph.getViewport().setMaxY(180);
 
         GraphView rollGraph = (GraphView)findViewById(R.id.rollGraph);
         rollData = new LineGraphSeries<DataPoint>();
         rollGraph.addSeries(rollData);
         rollGraph.getViewport().setXAxisBoundsManual(true);
+        rollGraph.getViewport().setYAxisBoundsManual(true);
         rollGraph.getViewport().setMinX(0);
         rollGraph.getViewport().setMaxX(60);
+        rollGraph.getViewport().setMinY(0);
+        rollGraph.getViewport().setMaxY(180);
 
     }
 
@@ -306,7 +311,10 @@ public class DeviceControlActivity extends Activity {
 
     //TODO: move this to the top
     private final Handler mHandler = new Handler();
-    private Runnable mTimer1;
+    private Runnable graphUpdateThread;
+    private Runnable tempValueThread;
+    private Runnable rollValueThread;
+    private Runnable pitchValueThread;
     private LineGraphSeries<DataPoint> tempData;
     private LineGraphSeries<DataPoint> pitchData;
     private LineGraphSeries<DataPoint> rollData;
@@ -322,19 +330,51 @@ public class DeviceControlActivity extends Activity {
             Log.d(TAG, "Connect request result=" + result);
         }
 
-        // the graph updating part
-        mTimer1 = new Runnable() {
+        // Threads updates graph
+        graphUpdateThread = new Runnable() {
             @Override
             public void run() {
                 graphLastXValue += 1d;
-                readTemperature();
-                tempData.appendData(new DataPoint(graphLastXValue, lastTemp), true, 60);
-                pitchData.appendData(new DataPoint(graphLastXValue, lastPitch), true, 60);
-                rollData.appendData(new DataPoint(graphLastXValue, lastRoll), true, 60);
+                if (lastTemp != 0) {
+                    tempData.appendData(new DataPoint(graphLastXValue, lastTemp), true, 60);
+                }
+                if (lastRoll != 0) {
+                    rollData.appendData(new DataPoint(graphLastXValue, lastRoll), true, 60);
+                }
+                if (lastPitch != 0) {
+                    pitchData.appendData(new DataPoint(graphLastXValue, lastPitch), true, 60);
+                }
                 mHandler.postDelayed(this, 200);
             }
         };
-        mHandler.postDelayed(mTimer1, 1000);
+        mHandler.postDelayed(graphUpdateThread, 0);
+
+        tempValueThread = new Runnable() {
+            @Override
+            public void run() {
+                readTemperature();
+                mHandler.postDelayed(this, 1000);
+            }
+        };
+        mHandler.postDelayed(tempValueThread, 0);
+
+        rollValueThread = new Runnable() {
+            @Override
+            public void run() {
+                readRoll();
+                mHandler.postDelayed(this, 300);
+            }
+        };
+        mHandler.postDelayed(rollValueThread, 100);
+
+        pitchValueThread = new Runnable() {
+            @Override
+            public void run() {
+                readPitch();
+                mHandler.postDelayed(this, 300);
+            }
+        };
+        mHandler.postDelayed(pitchValueThread, 200);
     }
 
     @Override
@@ -389,17 +429,26 @@ public class DeviceControlActivity extends Activity {
     }
 
     private void readTemperature() {
-        if (mBluetoothLeService == null || !mGattCharacteristics.containsKey(SampleGattAttributes.TEMP_SERVICE_UUID)
-                || !mGattCharacteristics.get(SampleGattAttributes.TEMP_SERVICE_UUID)
-                    .containsKey(SampleGattAttributes.TEMP_CHAR_UUID)) {
-            return;
-        }
-        final BluetoothGattCharacteristic tempChar =
-                mGattCharacteristics.get(SampleGattAttributes.TEMP_SERVICE_UUID)
-                        .get(SampleGattAttributes.TEMP_CHAR_UUID);
-        mBluetoothLeService.readCharacteristic(tempChar);
+        readCharacteristic(GattAttributes.TEMP_SERVICE_UUID, GattAttributes.TEMP_CHAR_UUID);
     }
 
+    private void readRoll() {
+        readCharacteristic(GattAttributes.ACC_SERVICE_UUID, GattAttributes.ROLL_CHAR_UUID);
+    }
+
+    private void readPitch() {
+        readCharacteristic(GattAttributes.ACC_SERVICE_UUID, GattAttributes.PITCH_CHAR_UUID);
+    }
+
+    private void readCharacteristic(String serviceUuid, String characteristicsUuid) {
+        if (mBluetoothLeService == null || !mGattCharacteristics.containsKey(serviceUuid)
+                || !mGattCharacteristics.get(serviceUuid).containsKey(characteristicsUuid)) {
+            return;
+        }
+        final BluetoothGattCharacteristic characteristic =
+                mGattCharacteristics.get(serviceUuid).get(characteristicsUuid);
+        mBluetoothLeService.readCharacteristic(characteristic);
+    }
 
     // Demonstrates how to iterate through the supported GATT Services/Characteristics.
     // In this sample, we populate the data structure that is bound to the ExpandableListView
@@ -411,7 +460,7 @@ public class DeviceControlActivity extends Activity {
         // Loops through available GATT Services.
         for (BluetoothGattService gattService : gattServices) {
             uuid = gattService.getUuid().toString();
-            if (SampleGattAttributes.lookup(uuid) == null) {
+            if (GattAttributes.lookup(uuid) == null) {
                 continue;
             }
 
@@ -422,7 +471,7 @@ public class DeviceControlActivity extends Activity {
                     gattService.getCharacteristics();
             for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
                 uuid = gattCharacteristic.getUuid().toString();
-                if (SampleGattAttributes.lookup(uuid) == null) {
+                if (GattAttributes.lookup(uuid) == null) {
                     continue;
                 }
                 characteristicMap.put(uuid, gattCharacteristic);

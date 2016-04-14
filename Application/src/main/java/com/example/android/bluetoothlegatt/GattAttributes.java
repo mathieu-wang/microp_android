@@ -21,7 +21,7 @@ import java.util.HashMap;
 /**
  * This class includes a small subset of standard GATT attributes for demonstration purposes.
  */
-public class SampleGattAttributes {
+public class GattAttributes {
     private static HashMap<String, String> attributes = new HashMap();
     public static final String ACC_SERVICE_UUID =     "00366e80-cf3a-11e1-9ab4-0002a5d5c51b";
     public static final String ROLL_CHAR_UUID =       "01366e80-cf3a-11e1-9ab4-0002a5d5c51b";
