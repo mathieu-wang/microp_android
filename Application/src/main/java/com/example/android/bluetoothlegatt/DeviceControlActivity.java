@@ -479,7 +479,10 @@ public class DeviceControlActivity extends Activity {
     }
 
     public byte[] intToByteArray(int value) {
-        return ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(value).array();
+        byte lowByte = (byte)(value & 0xFF);
+        byte[] byteArray = new byte[1];
+        byteArray[0] = lowByte;
+        return byteArray;
     }
 
     // Demonstrates how to iterate through the supported GATT Services/Characteristics.

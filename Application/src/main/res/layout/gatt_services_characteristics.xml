@@ -326,7 +326,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:weightSum="1">
-        <TextView android:text="0"
+        <TextView android:text="Low"
             android:id="@+id/answerNegative10i"
             android:textSize="13sp"
             android:layout_width="wrap_content"
@@ -336,7 +336,7 @@
             android:layout_width="300sp"
             android:layout_height="match_parent" />
 
-        <TextView android:text="Max"
+        <TextView android:text="High"
             android:id="@+id/answer10i"
             android:textSize="13sp"
             android:layout_width="wrap_content"
@@ -347,7 +347,7 @@
         android:layout_weight="0"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:max="2147483647" />
+        android:max="127" />
 
     <LinearLayout
         android:orientation="horizontal"
