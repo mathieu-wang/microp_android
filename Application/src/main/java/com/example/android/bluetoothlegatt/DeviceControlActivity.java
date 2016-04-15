@@ -269,12 +269,14 @@ public class DeviceControlActivity extends Activity {
             };
 
     //TODO: move this to the top
-    private final Handler mHandler = new Handler();
+    private final Handler graphUpdateHandler = new Handler();
+    private final Handler tempValueHandler = new Handler();
+    private final Handler rollValueHandler = new Handler();
+    private final Handler pitchValueHandler = new Handler();
     private Runnable graphUpdateThread;
     private Runnable tempValueThread;
     private Runnable rollValueThread;
     private Runnable pitchValueThread;
-    private Runnable doubleTapMonitorThread;
     private LineGraphSeries<DataPoint> tempData;
     private LineGraphSeries<DataPoint> pitchData;
     private LineGraphSeries<DataPoint> rollData;
@@ -330,45 +332,45 @@ public class DeviceControlActivity extends Activity {
                     ((TextView)findViewById(R.id.pitchValue)).setText(String.format ("%.2f", lastPitch));
                     pitchData.appendData(new DataPoint(graphLastXValue, lastPitch), true, 60);
                 }
-                mHandler.postDelayed(this, 200);
+                graphUpdateHandler.postDelayed(this, 200);
             }
         };
-        mHandler.postDelayed(graphUpdateThread, 0);
+        graphUpdateHandler.postDelayed(graphUpdateThread, 0);
 
         tempValueThread = new Runnable() {
             @Override
             public void run() {
                 readTemperature();
-                mHandler.postDelayed(this, 1000);
+                tempValueHandler.postDelayed(this, 1000);
             }
         };
-        mHandler.postDelayed(tempValueThread, 50);
+        tempValueHandler.postDelayed(tempValueThread, 0);
 
         rollValueThread = new Runnable() {
             @Override
             public void run() {
                 readRoll();
-                mHandler.postDelayed(this, 500);
+                rollValueHandler.postDelayed(this, 500);
             }
         };
-        mHandler.postDelayed(rollValueThread, 100);
+        rollValueHandler.postDelayed(rollValueThread, 200);
 
         pitchValueThread = new Runnable() {
             @Override
             public void run() {
                 readPitch();
-                mHandler.postDelayed(this, 500);
+                pitchValueHandler.postDelayed(this, 500);
             }
         };
-        mHandler.postDelayed(pitchValueThread, 300);
+        pitchValueHandler.postDelayed(pitchValueThread, 400);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mHandler.removeCallbacks(tempValueThread);
-        mHandler.removeCallbacks(rollValueThread);
-        mHandler.removeCallbacks(pitchValueThread);
+        graphUpdateHandler.removeCallbacks(tempValueThread);
+        graphUpdateHandler.removeCallbacks(rollValueThread);
+        graphUpdateHandler.removeCallbacks(pitchValueThread);
         unregisterReceiver(mGattUpdateReceiver);
         registerReceiver(mGattNotifReceiver, makeGattNotifIntentFilter());
     }
