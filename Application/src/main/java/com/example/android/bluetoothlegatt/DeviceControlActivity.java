@@ -17,6 +17,7 @@
 package com.example.android.bluetoothlegatt;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.content.BroadcastReceiver;
@@ -28,6 +29,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -138,6 +140,8 @@ public class DeviceControlActivity extends Activity {
         }
     };
 
+
+
     private final BroadcastReceiver mGattNotifReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -145,9 +149,10 @@ public class DeviceControlActivity extends Activity {
             if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 String uuid = intent.getStringExtra(BluetoothLeService.CHAR_DATA);
                 if (GattAttributes.DOUBLETAP_CHAR_UUID.equals(uuid)) {
-                    Intent myAct = new Intent(context, DeviceControlActivity.class);
-                    myAct.setFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
-                    context.startActivity(myAct);
+//                    Intent myAct = new Intent(context, DeviceControlActivity.class);
+//                    myAct.setFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
+//                    context.startActivity(myAct);
+                    issueNotification();
                 }
             }
         }
@@ -291,6 +296,23 @@ public class DeviceControlActivity extends Activity {
                         WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
     }
 
+    private void issueNotification() {
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.tile)
+                        .setContentTitle("Wake Up!")
+                        .setContentText("Time for MicroP Quiz!");
+
+        // Sets an ID for the notification
+        int mNotificationId = 001;
+        // Gets an instance of the NotificationManager service
+        NotificationManager mNotifyMgr =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        // Builds the notification and issues it.
+        mNotifyMgr.notify(mNotificationId, mBuilder.build());
+        wakeUp();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -301,7 +323,7 @@ public class DeviceControlActivity extends Activity {
             System.out.println("mGattNotifReceiver not registered. Ignored");
         }
 
-        wakeUp();
+//        wakeUp();
 
         if (mBluetoothLeService != null) {
             final boolean result = mBluetoothLeService.connect(mDeviceAddress);
@@ -368,9 +390,9 @@ public class DeviceControlActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        graphUpdateHandler.removeCallbacks(tempValueThread);
-        graphUpdateHandler.removeCallbacks(rollValueThread);
-        graphUpdateHandler.removeCallbacks(pitchValueThread);
+        tempValueHandler.removeCallbacks(tempValueThread);
+        rollValueHandler.removeCallbacks(rollValueThread);
+        pitchValueHandler.removeCallbacks(pitchValueThread);
         unregisterReceiver(mGattUpdateReceiver);
         registerReceiver(mGattNotifReceiver, makeGattNotifIntentFilter());
     }
