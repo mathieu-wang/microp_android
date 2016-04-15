@@ -17,6 +17,7 @@
 package com.example.android.bluetoothlegatt;
 
 import android.app.Activity;
+import android.app.KeyguardManager;
 import android.app.NotificationManager;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
@@ -29,6 +30,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.util.TypedValue;
@@ -287,13 +289,25 @@ public class DeviceControlActivity extends Activity {
     private LineGraphSeries<DataPoint> rollData;
     private double graphLastXValue = 5d;
 
+    private PowerManager.WakeLock wakeLock;
+
     private void wakeUp() {
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
-                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-                        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON,
-                        WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
-                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-                        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock((PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP), "TAG");
+        wakeLock.acquire();
+
+        KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+        KeyguardManager.KeyguardLock keyguardLock = keyguardManager.newKeyguardLock("TAG");
+        keyguardLock.disableKeyguard();
+        runOnUiThread(new Runnable(){
+            public void run(){
+                getWindow().addFlags(
+                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+                                | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                                | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+            }
+        });
     }
 
     private void issueNotification() {
@@ -354,7 +368,7 @@ public class DeviceControlActivity extends Activity {
                     ((TextView)findViewById(R.id.pitchValue)).setText(String.format ("%.2f", lastPitch));
                     pitchData.appendData(new DataPoint(graphLastXValue, lastPitch), true, 60);
                 }
-                graphUpdateHandler.postDelayed(this, 200);
+                graphUpdateHandler.postDelayed(this, 250);
             }
         };
         graphUpdateHandler.postDelayed(graphUpdateThread, 0);
@@ -372,19 +386,19 @@ public class DeviceControlActivity extends Activity {
             @Override
             public void run() {
                 readRoll();
-                rollValueHandler.postDelayed(this, 500);
+                rollValueHandler.postDelayed(this, 750);
             }
         };
-        rollValueHandler.postDelayed(rollValueThread, 200);
+        rollValueHandler.postDelayed(rollValueThread, 250);
 
         pitchValueThread = new Runnable() {
             @Override
             public void run() {
                 readPitch();
-                pitchValueHandler.postDelayed(this, 500);
+                pitchValueHandler.postDelayed(this, 750);
             }
         };
-        pitchValueHandler.postDelayed(pitchValueThread, 400);
+        pitchValueHandler.postDelayed(pitchValueThread, 500);
     }
 
     @Override
@@ -395,6 +409,7 @@ public class DeviceControlActivity extends Activity {
         pitchValueHandler.removeCallbacks(pitchValueThread);
         unregisterReceiver(mGattUpdateReceiver);
         registerReceiver(mGattNotifReceiver, makeGattNotifIntentFilter());
+        setDoubleTap = false;
     }
 
     @Override
