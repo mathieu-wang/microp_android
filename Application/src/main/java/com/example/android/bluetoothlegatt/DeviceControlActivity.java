@@ -128,11 +128,15 @@ public class DeviceControlActivity extends Activity {
                         }
                         break;
                     case GattAttributes.ROLL_CHAR_UUID:
+                        readyToReadPitch = true;
+                        readyToReadRoll = false;
                         if (0 < value && value < 180) {
                             lastRoll = value;
                         }
                         break;
                     case GattAttributes.PITCH_CHAR_UUID:
+                        readyToReadRoll = true;
+                        readyToReadPitch = false;
                         if (0 < value && value < 180) {
                             lastPitch = value;
                         }
@@ -151,9 +155,6 @@ public class DeviceControlActivity extends Activity {
             if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 String uuid = intent.getStringExtra(BluetoothLeService.CHAR_DATA);
                 if (GattAttributes.DOUBLETAP_CHAR_UUID.equals(uuid)) {
-//                    Intent myAct = new Intent(context, DeviceControlActivity.class);
-//                    myAct.setFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
-//                    context.startActivity(myAct);
                     issueNotification();
                 }
             }
@@ -276,6 +277,9 @@ public class DeviceControlActivity extends Activity {
             };
 
     //TODO: move this to the top
+    private boolean readyToReadPitch = true;
+    private boolean readyToReadRoll;
+
     private final Handler graphUpdateHandler = new Handler();
     private final Handler tempValueHandler = new Handler();
     private final Handler rollValueHandler = new Handler();
@@ -337,8 +341,6 @@ public class DeviceControlActivity extends Activity {
             System.out.println("mGattNotifReceiver not registered. Ignored");
         }
 
-//        wakeUp();
-
         if (mBluetoothLeService != null) {
             final boolean result = mBluetoothLeService.connect(mDeviceAddress);
             Log.d(TAG, "Connect request result=" + result);
@@ -368,7 +370,7 @@ public class DeviceControlActivity extends Activity {
                     ((TextView)findViewById(R.id.pitchValue)).setText(String.format ("%.2f", lastPitch));
                     pitchData.appendData(new DataPoint(graphLastXValue, lastPitch), true, 60);
                 }
-                graphUpdateHandler.postDelayed(this, 250);
+                graphUpdateHandler.postDelayed(this, 100);
             }
         };
         graphUpdateHandler.postDelayed(graphUpdateThread, 0);
@@ -380,25 +382,29 @@ public class DeviceControlActivity extends Activity {
                 tempValueHandler.postDelayed(this, 1000);
             }
         };
-        tempValueHandler.postDelayed(tempValueThread, 0);
+        tempValueHandler.postDelayed(tempValueThread, 25);
 
         rollValueThread = new Runnable() {
             @Override
             public void run() {
-                readRoll();
-                rollValueHandler.postDelayed(this, 750);
+                if (readyToReadRoll) {
+                    readRoll();
+                }
+                rollValueHandler.postDelayed(this, 100);
             }
         };
-        rollValueHandler.postDelayed(rollValueThread, 250);
+        rollValueHandler.postDelayed(rollValueThread, 0);
 
         pitchValueThread = new Runnable() {
             @Override
             public void run() {
-                readPitch();
-                pitchValueHandler.postDelayed(this, 750);
+                if (readyToReadPitch) {
+                    readPitch();
+                }
+                pitchValueHandler.postDelayed(this, 100);
             }
         };
-        pitchValueHandler.postDelayed(pitchValueThread, 500);
+        pitchValueHandler.postDelayed(pitchValueThread, 50);
     }
 
     @Override
